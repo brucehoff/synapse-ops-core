@@ -55,6 +55,7 @@ jobs:
     with:
       PIPELINE_PARAMETERS: ${{ needs.set-up.outputs.PIPELINE_PARAMETERS }}
       SECOND_REPO_NAME: Synapse-Stack-Builder
+      SECOND_REPO_BRANCH: release-${{ inputs.INSTANCE }}
     secrets: inherit
     permissions:
       id-token: write

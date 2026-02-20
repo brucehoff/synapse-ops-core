@@ -41,7 +41,10 @@ jobs:
           ${{ inputs.PIPELINE_PARAMETERS }},\
           Branch=${{ env.REPOSITORY_BRANCH }},\
           RepoOwner=${{ env.REPOSITORY_OWNER }},\
-          Repository=${{ env.REPOSITORY_NAME }}
+          Repository=${{ env.REPOSITORY_NAME }},\
+          VpcId=${{ vars.VPC_ID }},\
+          Subnets=${{ vars.SUBNETS }},\
+          SecurityGroupIds=${{ vars.SECURITY_GROUP_IDS }}
 
           # There will be one pipeline for running jobs based on the Stack Builder
           # and one pipeline for running short lived commands.
