@@ -1,0 +1,35 @@
+---
+name: Remove dev stacks
+
+on:
+  workflow_call:
+
+jobs:
+  set-up:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine Pipeline Parameters
+        id: pipeline-params
+        run: |
+          PIPELINE_PARAMETERS="CommandToExecute=\"scripts/remove_dev_stacks.sh \""
+          echo "PIPELINE_PARAMETERS=$PIPELINE_PARAMETERS" >> $GITHUB_OUTPUT
+    outputs:
+      PIPELINE_PARAMETERS: ${{ steps.pipeline-params.outputs.PIPELINE_PARAMETERS }}
+
+  invoke_pipeline:
+    needs: set-up
+    uses: "./.github/workflows/invoke_code_pipeline.yml"
+    with:
+      PIPELINE_PARAMETERS: ${{ needs.set-up.outputs.PIPELINE_PARAMETERS }}
+      SECOND_REPO_NAME: Synapse-Stack-Builder
+    secrets: inherit
+    permissions:
+      # https://graphite.dev/guides/github-actions-permissions
+      id-token: write
+      contents: read
+      deployments: write
+      security-events: write
+      statuses: write
+      actions: write
+      checks: write
+...
