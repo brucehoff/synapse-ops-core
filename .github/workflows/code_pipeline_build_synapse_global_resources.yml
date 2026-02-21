@@ -12,6 +12,16 @@ on:
         required: true
         type: string
         description: The prefix used when exporting VPC resources from ops VPC stack
+      STACK_BUILDER_OWNER:
+        required: false
+        type: string
+        default: Sage-Bionetworks
+        description: Owner of Synapse-Stack-Builder repository, defaults to Sage-Bionetworks
+      STACK_BUILDER_BRANCH:
+        required: false
+        type: string
+        default: develop
+        description: Branch of Synapse-Stack-Builder repository, defaults to develop
 
 jobs:
   set-up:
@@ -31,6 +41,8 @@ jobs:
     with:
       PIPELINE_PARAMETERS: ${{ needs.set-up.outputs.PIPELINE_PARAMETERS }}
       SECOND_REPO_NAME: Synapse-Stack-Builder
+      SECOND_REPO_OWNER: ${{ inputs.STACK_BUILDER_OWNER }}
+      SECOND_REPO_BRANCH: ${{ inputs.STACK_BUILDER_BRANCH }}
     secrets: inherit
     permissions:
       id-token: write
