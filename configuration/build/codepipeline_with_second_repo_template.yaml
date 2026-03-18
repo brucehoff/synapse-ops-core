@@ -87,7 +87,7 @@ Resources:
   CodePipelineServiceRole:
     Type: AWS::IAM::Role
     Properties:
-      MaxSessionDuration: 28800
+      MaxSessionDuration: 43200
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -119,7 +119,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub 'Deployment-Pipeline-CodeBuildServiceRole'
-      MaxSessionDuration: 28800
+      MaxSessionDuration: 43200
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -222,7 +222,7 @@ Resources:
         PrivilegedMode: true
         ImagePullCredentialsType: CODEBUILD
       ServiceRole: !GetAtt CodeBuildServiceRole.Arn
-      TimeoutInMinutes: 600
+      TimeoutInMinutes: 2160
       QueuedTimeoutInMinutes: 480
       VpcConfig:
         VpcId: !Ref VpcId
