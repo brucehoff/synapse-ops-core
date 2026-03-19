@@ -32,6 +32,10 @@ BEANSTALK_PLATFORM_VERSION=${8}
 # Folder containing source code
 SRC_PATH=${9}
 
+# Need to get the URL of the Cognito Pool from the Global Resources Stack
+COGNITO_USER_POOL_ID=$(aws cloudformation describe-stacks --stack-name synapse-dev-global-resources --query "Stacks[0].Outputs[?OutputKey=='CognitoUserPoolId'].OutputValue" --output text)
+COGNITO_DISCOVERY_DOCUMENT=https://cognito-idp.us-east-1.amazonaws.com/${COGNITO_USER_POOL_ID}/.well-known/openid-configuration
+
 cd $SRC_PATH
 
 mvn clean install
@@ -57,6 +61,7 @@ CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.image.version.amazonlinux=$BEANSTAL
 CMD_PROPS+=" -Dorg.sagebionetworks.docs.deploy=false"
 CMD_PROPS+=" -Dorg.sagebionetworks.docs.source=dev.release.rest.doc.sagebase.org"
 CMD_PROPS+=" -Dorg.sagebionetworks.docs.destination=rest-docs.synapse.org/rest"
+CMD_PROPS+=" -Dorg.sagebionetworks.oauth2.sagebio.discoveryDocument=$COGNITO_DISCOVERY_DOCUMENT"
 if [[ "prod" == "$STACK" ]]; then
   CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.instance.type=m6g.large"
   CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.instance.memory=4096"
