@@ -33,7 +33,7 @@ BEANSTALK_PLATFORM_VERSION=${8}
 SRC_PATH=${9}
 
 # Need to get the URL of the Cognito Pool from the Global Resources Stack
-COGNITO_USER_POOL_ID=$(aws cloudformation describe-stacks --stack-name synapse-dev-global-resources --query "Stacks[0].Outputs[?OutputKey=='CognitoUserPoolId'].OutputValue" --output text)
+COGNITO_USER_POOL_ID=$(aws cloudformation describe-stacks --stack-name synapse-${STACK}-global-resources --query "Stacks[0].Outputs[?OutputKey=='CognitoUserPoolId'].OutputValue" --output text)
 COGNITO_DISCOVERY_DOCUMENT=https://cognito-idp.us-east-1.amazonaws.com/${COGNITO_USER_POOL_ID}/.well-known/openid-configuration
 
 cd $SRC_PATH
