@@ -3,6 +3,11 @@ name: Grid session backfill
 
 on:
   workflow_call:
+    inputs:
+      SYNAPSE_HOST:
+        required: true
+        type: string
+        description: The Synapse host to target
 
 jobs:
   set-up:
@@ -12,7 +17,7 @@ jobs:
         id: pipeline-params
         run: |
           PIPELINE_PARAMETERS=\
-          "CommandToExecute=\"scripts/grid_session_backfill.sh ${{ vars.SYNAPSE_HOST }}\""
+          "CommandToExecute=\"scripts/grid_session_backfill.sh ${{ inputs.SYNAPSE_HOST }}\""
           echo "PIPELINE_PARAMETERS=$PIPELINE_PARAMETERS" >> $GITHUB_OUTPUT
     outputs:
       PIPELINE_PARAMETERS: ${{ steps.pipeline-params.outputs.PIPELINE_PARAMETERS }}
