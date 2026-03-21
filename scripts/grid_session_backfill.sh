@@ -5,7 +5,7 @@
 
 set +x
 
-SYNAPSE_HOST="https://repo-prod-582-0.prod.sagebase.org"
+SYNAPSE_HOST=${1}
 
 # Retrieve a personal access token for a Synapse admin user from AWS secrets manager
 ACCESS_TOKEN=`aws secretsmanager get-secret-value --secret-id /synapse/admin-pat --query SecretString --output text`

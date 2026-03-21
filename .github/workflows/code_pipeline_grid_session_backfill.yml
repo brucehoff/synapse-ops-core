@@ -11,7 +11,8 @@ jobs:
       - name: Determine Pipeline Parameters
         id: pipeline-params
         run: |
-          PIPELINE_PARAMETERS="CommandToExecute=\"scripts/grid_session_backfill.sh\""
+          PIPELINE_PARAMETERS=\
+          "CommandToExecute=\"scripts/grid_session_backfill.sh ${{ vars.SYNAPSE_HOST }}\""
           echo "PIPELINE_PARAMETERS=$PIPELINE_PARAMETERS" >> $GITHUB_OUTPUT
     outputs:
       PIPELINE_PARAMETERS: ${{ steps.pipeline-params.outputs.PIPELINE_PARAMETERS }}
