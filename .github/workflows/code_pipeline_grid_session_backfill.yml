@@ -1,0 +1,39 @@
+---
+name: Grid session backfill
+
+on:
+  workflow_call:
+    inputs:
+      SYNAPSE_HOST:
+        required: true
+        type: string
+        description: The Synapse host to target
+
+jobs:
+  set-up:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine Pipeline Parameters
+        id: pipeline-params
+        run: |
+          PIPELINE_PARAMETERS=\
+          "CommandToExecute=\"scripts/grid_session_backfill.sh ${{ inputs.SYNAPSE_HOST }}\""
+          echo "PIPELINE_PARAMETERS=$PIPELINE_PARAMETERS" >> $GITHUB_OUTPUT
+    outputs:
+      PIPELINE_PARAMETERS: ${{ steps.pipeline-params.outputs.PIPELINE_PARAMETERS }}
+
+  invoke_pipeline:
+    needs: set-up
+    uses: "./.github/workflows/invoke_code_pipeline.yml"
+    with:
+      PIPELINE_PARAMETERS: ${{ needs.set-up.outputs.PIPELINE_PARAMETERS }}
+    secrets: inherit
+    permissions:
+      id-token: write
+      contents: read
+      deployments: write
+      security-events: write
+      statuses: write
+      actions: write
+      checks: write
+...
