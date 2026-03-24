@@ -57,7 +57,7 @@ jobs:
       SECOND_REPO_NAME: Synapse-Stack-Builder
 #      SECOND_REPO_BRANCH: release-${{ inputs.INSTANCE }}
       SECOND_REPO_OWNER: brucehoff
-      SECOND_REPO_BRANCH: home-week-hackathon
+      SECOND_REPO_BRANCH: PLFM-9548
     secrets: inherit
     permissions:
       id-token: write
