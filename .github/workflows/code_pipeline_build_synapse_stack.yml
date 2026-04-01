@@ -36,6 +36,11 @@ on:
         type: string
         description: example, 5.5.0
         default: 5.5.0
+      DEPLOYMENT_TARGET:
+        required: true
+        type: string
+        description: BEANSTALK or ECS_FARGATE
+        default: BEANSTALK
 
 jobs:
   set-up:
@@ -44,7 +49,7 @@ jobs:
       - name: Determine Pipeline Parameters
         id: pipeline-params
         run: |
-          PIPELINE_PARAMETERS="CommandToExecute=\"scripts/build_synapse_stack.sh ${{ inputs.STACK }} ${{ inputs.INSTANCE }} ${{ inputs.REPO_AND_WORKERS_VERSION }} ${{ inputs.REPO_BEANSTALK_VERSION }} ${{ inputs.PORTAL_VERSION }} ${{ inputs.PORTAL_BEANSTALK_VERSION }} ${{ inputs.VPC_SUBNET_COLOR }} ${{ inputs.BEANSTALK_PLATFORM_VERSION }} \""
+          PIPELINE_PARAMETERS="CommandToExecute=\"scripts/build_synapse_stack.sh ${{ inputs.STACK }} ${{ inputs.INSTANCE }} ${{ inputs.REPO_AND_WORKERS_VERSION }} ${{ inputs.REPO_BEANSTALK_VERSION }} ${{ inputs.PORTAL_VERSION }} ${{ inputs.PORTAL_BEANSTALK_VERSION }} ${{ inputs.VPC_SUBNET_COLOR }} ${{ inputs.BEANSTALK_PLATFORM_VERSION }}  ${{ inputs.DEPLOYMENT_TARGET }} \""
           echo "PIPELINE_PARAMETERS=$PIPELINE_PARAMETERS" >> $GITHUB_OUTPUT
     outputs:
       PIPELINE_PARAMETERS: ${{ steps.pipeline-params.outputs.PIPELINE_PARAMETERS }}
