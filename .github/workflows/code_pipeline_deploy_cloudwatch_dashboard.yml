@@ -28,7 +28,7 @@ jobs:
           CommandToExecute=\"scripts/synapse-cloudwatch-dashboard.sh \
           ${{ inputs.STACK }} \
           ${{ inputs.INSTANCE }} \
-          ${{ inputs.BEANSTALK_NUMBERS }} \""
+          ${{ inputs.BEANSTALK_NUMBERS }} \" "
           echo "PIPELINE_PARAMETERS=$PIPELINE_PARAMETERS" >> $GITHUB_OUTPUT
     outputs:
       PIPELINE_PARAMETERS: ${{ steps.pipeline-params.outputs.PIPELINE_PARAMETERS }}
@@ -39,6 +39,7 @@ jobs:
     with:
       PIPELINE_PARAMETERS: ${{ needs.set-up.outputs.PIPELINE_PARAMETERS }}
       SECOND_REPO_NAME: synapse-cloudwatch-dashboard
+      SECON_REPO_BRANCH: main
     secrets: inherit
     permissions:
       # https://graphite.dev/guides/github-actions-permissions
