@@ -49,7 +49,7 @@ jobs:
           # There will be one pipeline for running jobs based on the Stack Builder
           # and one pipeline for running short lived commands.
           if [[ "${{ inputs.SECOND_REPO_NAME }}" ]]; then
-            echo "CODE_PIPELINE_NAME=Deployment-Pipeline" >> $GITHUB_OUTPUT
+            echo "CODE_PIPELINE_NAME=Deployment-Pipeline-${{ env.REPOSITORY_OWNER }}" >> $GITHUB_OUTPUT
             echo "PATH_TO_PIPELINE=configuration/build/codepipeline_with_second_repo_template.yaml" >> $GITHUB_OUTPUT
             PIPELINE_PARAMETERS=${PIPELINE_PARAMETERS},SecondRepoOwner=${{ inputs.SECOND_REPO_OWNER }},SecondRepoName=${{ inputs.SECOND_REPO_NAME }},SecondRepoBranch=${{ inputs.SECOND_REPO_BRANCH }}
           else
