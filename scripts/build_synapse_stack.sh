@@ -51,7 +51,7 @@ CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.version.workers=$REPO_AND_WORKERS_V
 CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.version.portal=$PORTAL_VERSION"
 CMD_PROPS+=" -Dorg.sagebionetworks.vpc.subnet.color=$VPC_SUBNET_COLOR"
 CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.number.repo=$REPO_BEANSTALK_VERSION"
-CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.number.workers=$REPO_BEANSTALK_VERSION"
+CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.number.workers=0"
 CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.number.portal=$PORTAL_BEANSTALK_VERSION"
 CMD_PROPS+=" -Dorg.sagebionetworks.repo.rds.storage.type=gp3"
 CMD_PROPS+=" -Dorg.sagebionetworks.repo.rds.iops=-1"
