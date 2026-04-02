@@ -11,7 +11,7 @@ on:
       INSTANCE:
         required: true
         type: string
-        description: Example: 583
+        description: E.g., 583
       BEANSTALK_NUMBERS:
         required: true
         type: string
