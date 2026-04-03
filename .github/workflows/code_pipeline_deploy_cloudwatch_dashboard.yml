@@ -49,7 +49,8 @@ jobs:
     with:
       PIPELINE_PARAMETERS: ${{ needs.set-up.outputs.PIPELINE_PARAMETERS }}
       SECOND_REPO_NAME: synapse-cloudwatch-dashboard
-      SECOND_REPO_BRANCH: main
+      SECOND_REPO_OWNER: brucehoff
+      SECOND_REPO_BRANCH: PLFM-9548
     secrets: inherit
     permissions:
       # https://graphite.dev/guides/github-actions-permissions
