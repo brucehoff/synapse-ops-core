@@ -34,7 +34,6 @@ python configuration.py $STACK $INSTANCE $REPO_BEANSTALK_NUMBER,$WORKERS_BEANSTA
 
 
 npm install -g aws-cdk
-cdk acknowledge 34635
 
 echo "Configuring CDK environment..."
 export CDK_DEFAULT_ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
