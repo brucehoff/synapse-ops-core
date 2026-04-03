@@ -24,6 +24,10 @@ on:
         required: true
         type: string
         description: E.g., 583-0
+      BEANSTALK_MODE:
+        required: true
+        type: string
+        description: True or False
 
 jobs:
   set-up:
@@ -38,7 +42,8 @@ jobs:
           ${{ inputs.INSTANCE }} \
           ${{ inputs.REPO_BEANSTALK_NUMBER }} \
           ${{ inputs.WORKERS_BEANSTALK_NUMBER }} \
-          ${{ inputs.PORTAL_BEANSTALK_NUMBER }}\""
+          ${{ inputs.PORTAL_BEANSTALK_NUMBER }} \
+          ${{ inputs.BEANSTALK_MODE }}\""
           echo "PIPELINE_PARAMETERS=$PIPELINE_PARAMETERS" >> $GITHUB_OUTPUT
     outputs:
       PIPELINE_PARAMETERS: ${{ steps.pipeline-params.outputs.PIPELINE_PARAMETERS }}
