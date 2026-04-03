@@ -46,4 +46,6 @@ python configuration.py $STACK $INSTANCE $REPO_BEANSTALK_NUMBER,$WORKERS_BEANSTA
 npm install -g aws-cdk
 cdk acknowledge 34635
 
+pip install -r requirements.txt
+
 cdk deploy --profile default --context stack=$STACK --context stack_versions=$INSTANCE
