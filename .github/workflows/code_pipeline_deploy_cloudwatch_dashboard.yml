@@ -35,6 +35,7 @@ jobs:
           PIPELINE_PARAMETERS="\
           CommandToExecute=\"scripts/deploy_cloudwatch_dashboard.sh \
           ${{ inputs.STACK }} \
+          ${{ inputs.INSTANCE }} \
           ${{ inputs.REPO_BEANSTALK_NUMBER }} \
           ${{ inputs.WORKERS_BEANSTALK_NUMBER }} \
           ${{ inputs.PORTAL_BEANSTALK_NUMBER }}\""

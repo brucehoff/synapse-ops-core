@@ -28,6 +28,9 @@ SRC_PATH=${6}
 
 cd $SRC_PATH
 
+echo SRC_PATH is:
+echo $SRC_PATH
+
 echo current dir is:
 echo $(pwd)
 
