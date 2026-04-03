@@ -29,6 +29,6 @@ SRC_PATH=${6}
 cd $SRC_PATH
 
 # We run under the default AWS role
-python configuration.py $STACK $INSTANCXE $REPO_BEANSTALK_NUMBER,$WORKERS_BEANSTALK_NUMBER,$PORTAL_BEANSTALK_NUMBER default
+python configuration.py $STACK $INSTANCE $REPO_BEANSTALK_NUMBER,$WORKERS_BEANSTALK_NUMBER,$PORTAL_BEANSTALK_NUMBER default
 
 cdk deploy --profile default --context stack=$STACK --context stack_versions=$INSTANCE --context profile_name=default

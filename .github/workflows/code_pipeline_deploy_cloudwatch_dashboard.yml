@@ -33,7 +33,7 @@ jobs:
         id: pipeline-params
         run: |
           PIPELINE_PARAMETERS="\
-          CommandToExecute=\"scripts/synapse-cloudwatch-dashboard.sh \
+          CommandToExecute=\"scripts/deploy_cloudwatch_dashboard.sh \
           ${{ inputs.STACK }} \
           ${{ inputs.REPO_BEANSTALK_NUMBER }} \
           ${{ inputs.WORKERS_BEANSTALK_NUMBER }} \
