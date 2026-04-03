@@ -33,7 +33,8 @@ cd $SRC_PATH
 
 pip install -r requirements.txt
 
-python configuration.py $STACK $INSTANCE $REPO_BEANSTALK_NUMBER,$WORKERS_BEANSTALK_NUMBER,$PORTAL_BEANSTALK_NUMBER
+BEANSTALK_NUMBERS=$REPO_BEANSTALK_NUMBER,$WORKERS_BEANSTALK_NUMBER,$PORTAL_BEANSTALK_NUMBER
+python configuration.py $STACK $INSTANCE $BEANSTALK_NUMBERS
 
 
 npm install -g aws-cdk
@@ -43,4 +44,4 @@ export CDK_DEFAULT_ACCOUNT=$(aws sts get-caller-identity --query Account --outpu
 export CDK_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
 echo "Account: $CDK_DEFAULT_ACCOUNT, Region: $CDK_DEFAULT_REGION"
 
-cdk deploy --context stack=$STACK --context stack_versions=$INSTANCE --context beanstalk_mode=$BEANSTALK_MODE
+cdk deploy --context stack=$STACK --context stack_versions=$INSTANCE --context beanstalk_numbers=$BEANSTALK_NUMBERS --context beanstalk_mode=$BEANSTALK_MODE
