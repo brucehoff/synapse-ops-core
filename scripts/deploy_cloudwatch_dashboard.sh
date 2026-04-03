@@ -40,10 +40,10 @@ echo list all files
 ls -al
 
 # We run under the default AWS role
-python configuration.py $STACK $INSTANCE $REPO_BEANSTALK_NUMBER,$WORKERS_BEANSTALK_NUMBER,$PORTAL_BEANSTALK_NUMBER default
+python configuration.py $STACK $INSTANCE $REPO_BEANSTALK_NUMBER,$WORKERS_BEANSTALK_NUMBER,$PORTAL_BEANSTALK_NUMBER
 
 
 npm install -g aws-cdk
 cdk acknowledge 34635
 
-cdk deploy --profile default --context stack=$STACK --context stack_versions=$INSTANCE --context profile_name=default
+cdk deploy --profile default --context stack=$STACK --context stack_versions=$INSTANCE
