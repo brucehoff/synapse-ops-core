@@ -28,24 +28,17 @@ SRC_PATH=${6}
 
 cd $SRC_PATH
 
-echo SRC_PATH is:
-echo $SRC_PATH
+pip install -r requirements.txt
 
-echo current dir is:
-echo $(pwd)
-
-echo files in current dir:
-echo list all files
-
-ls -al
-
-# We run under the default AWS role
 python configuration.py $STACK $INSTANCE $REPO_BEANSTALK_NUMBER,$WORKERS_BEANSTALK_NUMBER,$PORTAL_BEANSTALK_NUMBER
 
 
 npm install -g aws-cdk
 cdk acknowledge 34635
 
-pip install -r requirements.txt
+echo "Configuring CDK environment..."
+export CDK_DEFAULT_ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
+export CDK_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+echo "Account: $CDK_DEFAULT_ACCOUNT, Region: $CDK_DEFAULT_REGION"
 
 cdk deploy --profile default --context stack=$STACK --context stack_versions=$INSTANCE
