@@ -28,6 +28,10 @@ SRC_PATH=${6}
 
 cd $SRC_PATH
 
+echo current dir is:
+echo $(pwd)
+
+echo files in current dir:
 echo list all files
 
 ls -al
@@ -37,5 +41,6 @@ python configuration.py $STACK $INSTANCE $REPO_BEANSTALK_NUMBER,$WORKERS_BEANSTA
 
 
 npm install -g aws-cdk
+cdk acknowledge 34635
 
 cdk deploy --profile default --context stack=$STACK --context stack_versions=$INSTANCE --context profile_name=default
