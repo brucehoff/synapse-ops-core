@@ -12,10 +12,18 @@ on:
         required: true
         type: string
         description: E.g., 583
-      BEANSTALK_NUMBERS:
+      REPO_BEANSTALK_NUMBER:
         required: true
         type: string
-        description: Comma delimited list, e.g., 583-0,583-0,583-0
+        description: E.g., 583-0
+      WORKERS_BEANSTALK_NUMBER:
+        required: true
+        type: string
+        description: E.g., 583-0
+      PORTAL_BEANSTALK_NUMBER:
+        required: true
+        type: string
+        description: E.g., 583-0
 
 jobs:
   set-up:
@@ -27,8 +35,9 @@ jobs:
           PIPELINE_PARAMETERS="\
           CommandToExecute=\"scripts/synapse-cloudwatch-dashboard.sh \
           ${{ inputs.STACK }} \
-          ${{ inputs.INSTANCE }} \
-          ${{ inputs.BEANSTALK_NUMBERS }} \" "
+          ${{ inputs.REPO_BEANSTALK_NUMBER }} \
+          ${{ inputs.WORKERS_BEANSTALK_NUMBER }} \
+          ${{ inputs.PORTAL_BEANSTALK_NUMBER }}\""
           echo "PIPELINE_PARAMETERS=$PIPELINE_PARAMETERS" >> $GITHUB_OUTPUT
     outputs:
       PIPELINE_PARAMETERS: ${{ steps.pipeline-params.outputs.PIPELINE_PARAMETERS }}
