@@ -39,9 +39,7 @@ python configuration.py $STACK $INSTANCE $BEANSTALK_NUMBERS
 
 npm install -g aws-cdk
 
-echo "Configuring CDK environment..."
 export CDK_DEFAULT_ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 export CDK_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
-echo "Account: $CDK_DEFAULT_ACCOUNT, Region: $CDK_DEFAULT_REGION"
 
 cdk deploy --context stack=$STACK --context stack_versions=$INSTANCE --context beanstalk_mode=$BEANSTALK_MODE
