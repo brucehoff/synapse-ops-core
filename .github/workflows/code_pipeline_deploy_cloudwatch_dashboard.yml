@@ -1,0 +1,69 @@
+---
+name: Deploy CloudWatch Dashboard
+
+on:
+  workflow_call:
+    inputs:
+      STACK:
+        required: true
+        type: string
+        description: dev or prod
+      INSTANCE:
+        required: true
+        type: string
+        description: E.g., 583
+      REPO_BEANSTALK_NUMBER:
+        required: true
+        type: string
+        description: E.g., 583-0
+      WORKERS_BEANSTALK_NUMBER:
+        required: true
+        type: string
+        description: E.g., 583-0
+      PORTAL_BEANSTALK_NUMBER:
+        required: true
+        type: string
+        description: E.g., 583-0
+      BEANSTALK_MODE:
+        required: true
+        type: string
+        description: True or False
+
+jobs:
+  set-up:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine Pipeline Parameters
+        id: pipeline-params
+        run: |
+          PIPELINE_PARAMETERS="\
+          CommandToExecute=\"scripts/deploy_cloudwatch_dashboard.sh \
+          ${{ inputs.STACK }} \
+          ${{ inputs.INSTANCE }} \
+          ${{ inputs.REPO_BEANSTALK_NUMBER }} \
+          ${{ inputs.WORKERS_BEANSTALK_NUMBER }} \
+          ${{ inputs.PORTAL_BEANSTALK_NUMBER }} \
+          ${{ inputs.BEANSTALK_MODE }}\""
+          echo "PIPELINE_PARAMETERS=$PIPELINE_PARAMETERS" >> $GITHUB_OUTPUT
+    outputs:
+      PIPELINE_PARAMETERS: ${{ steps.pipeline-params.outputs.PIPELINE_PARAMETERS }}
+
+  invoke_pipeline:
+    needs: set-up
+    uses: "./.github/workflows/invoke_code_pipeline.yml"
+    with:
+      PIPELINE_PARAMETERS: ${{ needs.set-up.outputs.PIPELINE_PARAMETERS }}
+      SECOND_REPO_NAME: synapse-cloudwatch-dashboard
+      SECOND_REPO_OWNER: brucehoff
+      SECOND_REPO_BRANCH: PLFM-9548
+    secrets: inherit
+    permissions:
+      # https://graphite.dev/guides/github-actions-permissions
+      id-token: write
+      contents: read
+      deployments: write
+      security-events: write
+      statuses: write
+      actions: write
+      checks: write
+...
