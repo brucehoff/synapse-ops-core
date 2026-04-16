@@ -29,8 +29,11 @@ VPC_SUBNET_COLOR=${7}
 # example 5.5.0
 BEANSTALK_PLATFORM_VERSION=${8}
 
+# BEANSTALK or ECS_FARGATE
+DEPLOYMENT_TARGET=${9}
+
 # Folder containing source code
-SRC_PATH=${9}
+SRC_PATH=${10}
 
 # Need to get the URL of the Cognito Pool from the Global Resources Stack
 COGNITO_USER_POOL_ID=$(aws cloudformation describe-stacks --stack-name synapse-${STACK}-global-resources --query "Stacks[0].Outputs[?OutputKey=='CognitoUserPoolId'].OutputValue" --output text)
@@ -56,12 +59,12 @@ CMD_PROPS+=" -Dorg.sagebionetworks.repo.rds.multi.az=true"
 CMD_PROPS+=" -Dorg.sagebionetworks.tables.rds.instance.count=1"
 CMD_PROPS+=" -Dorg.sagebionetworks.tables.rds.storage.type=gp3"
 CMD_PROPS+=" -Dorg.sagebionetworks.tables.rds.iops=-1"
-CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.number.workers=0"
 CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.image.version.amazonlinux=$BEANSTALK_PLATFORM_VERSION"
 CMD_PROPS+=" -Dorg.sagebionetworks.docs.deploy=false"
 CMD_PROPS+=" -Dorg.sagebionetworks.docs.source=dev.release.rest.doc.sagebase.org"
 CMD_PROPS+=" -Dorg.sagebionetworks.docs.destination=rest-docs.synapse.org/rest"
 CMD_PROPS+=" -Dorg.sagebionetworks.oauth2.sagebio.discoveryDocument=$COGNITO_DISCOVERY_DOCUMENT"
+CMD_PROPS+=" -Dorg.sagebionetworks.deployment.target=$DEPLOYMENT_TARGET"
 if [[ "prod" == "$STACK" ]]; then
   CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.instance.type=m6g.large"
   CMD_PROPS+=" -Dorg.sagebionetworks.beanstalk.instance.memory=4096"
