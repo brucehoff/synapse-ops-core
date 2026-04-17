@@ -8,26 +8,10 @@ on:
         required: true
         type: string
         description: dev or prod
-      INSTANCE:
+      INSTANCES:
         required: true
         type: string
-        description: E.g., 583
-      REPO_BEANSTALK_NUMBER:
-        required: true
-        type: string
-        description: E.g., 583-0
-      WORKERS_BEANSTALK_NUMBER:
-        required: true
-        type: string
-        description: E.g., 583-0
-      PORTAL_BEANSTALK_NUMBER:
-        required: true
-        type: string
-        description: E.g., 583-0
-      BEANSTALK_MODE:
-        required: true
-        type: string
-        description: True or False
+        description: comma delimited list of instances, e.g., 582,583,584,585
 
 jobs:
   set-up:
@@ -37,13 +21,9 @@ jobs:
         id: pipeline-params
         run: |
           PIPELINE_PARAMETERS="\
-          CommandToExecute=\"scripts/deploy_cloudwatch_dashboard.sh \
+          CommandToExecute=\"\\\"scripts/deploy_cloudwatch_dashboard.sh \
           ${{ inputs.STACK }} \
-          ${{ inputs.INSTANCE }} \
-          ${{ inputs.REPO_BEANSTALK_NUMBER }} \
-          ${{ inputs.WORKERS_BEANSTALK_NUMBER }} \
-          ${{ inputs.PORTAL_BEANSTALK_NUMBER }} \
-          ${{ inputs.BEANSTALK_MODE }}\""
+          ${{ inputs.INSTANCES }}\\\"\""
           echo "PIPELINE_PARAMETERS=$PIPELINE_PARAMETERS" >> $GITHUB_OUTPUT
     outputs:
       PIPELINE_PARAMETERS: ${{ steps.pipeline-params.outputs.PIPELINE_PARAMETERS }}
