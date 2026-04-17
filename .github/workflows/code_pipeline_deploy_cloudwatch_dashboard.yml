@@ -21,9 +21,9 @@ jobs:
         id: pipeline-params
         run: |
           PIPELINE_PARAMETERS="\
-          CommandToExecute=\"scripts/deploy_cloudwatch_dashboard.sh \
+          CommandToExecute=\"\\\"scripts/deploy_cloudwatch_dashboard.sh \
           ${{ inputs.STACK }} \
-          ${{ inputs.INSTANCES }}\""
+          ${{ inputs.INSTANCES }}\\\"\""
           echo "PIPELINE_PARAMETERS=$PIPELINE_PARAMETERS" >> $GITHUB_OUTPUT
     outputs:
       PIPELINE_PARAMETERS: ${{ steps.pipeline-params.outputs.PIPELINE_PARAMETERS }}
