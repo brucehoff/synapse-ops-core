@@ -1,5 +1,5 @@
 ---
-name: Grid session backfill
+name: Execute Admin Asynchronous Job
 
 on:
   workflow_call:
