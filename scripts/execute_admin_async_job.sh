@@ -37,12 +37,12 @@ while true; do
         "$SYNAPSE_HOST/repo/v1/admin/asynchronous/job/$JOB_ID")
     STATE=$(echo "$STATUS_RESPONSE" | jq -r '.jobState')
     echo "Job state: $STATE"
+    echo "$STATUS_RESPONSE"
     if [ "$STATE" == "COMPLETE" ]; then
         echo "Job completed successfully."
         break
     elif [ "$STATE" == "FAILED" ]; then
         echo "Job failed."
-        echo "$STATUS_RESPONSE"
         exit 2
     fi
     sleep 5
