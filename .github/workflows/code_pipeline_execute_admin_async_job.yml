@@ -11,7 +11,7 @@ on:
       ASYNC_JOB_PAYLOAD:
         required: true
         type: string
-        description: The payload to pass to the async job, in JSON format
+        description: The payload to pass to the async job, in JSON format, base64 encoded
 
 jobs:
   set-up:
