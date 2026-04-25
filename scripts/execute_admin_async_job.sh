@@ -11,6 +11,8 @@ set +x
 
 ASYNC_JOB_PAYLOAD=$(echo $ASYNC_JOB_PAYLOAD_B64 | base64 -d)
 
+echo ASYNC_JOB_PAYLOAD $ASYNC_JOB_PAYLOAD
+
 # Retrieve a personal access token for a Synapse admin user from AWS secrets manager
 ACCESS_TOKEN=`aws secretsmanager get-secret-value --secret-id /synapse/admin-pat --query SecretString --output text`
 
