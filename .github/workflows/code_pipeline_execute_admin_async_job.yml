@@ -20,7 +20,7 @@ jobs:
       - name: Determine Pipeline Parameters
         id: pipeline-params
         run: |
-          ASYNC_JOB_PAYLOAD='{{ inputs.ASYNC_JOB_PAYLOAD }}'
+          ASYNC_JOB_PAYLOAD='${{ inputs.ASYNC_JOB_PAYLOAD }}'
           ASYNC_JOB_PAYLOAD_B64=$(printf '%s' $ASYNC_JOB_PAYLOAD | base64 -w 0)
           echo ASYNC_JOB_PAYLOAD_B64: $ASYNC_JOB_PAYLOAD_B64
           PIPELINE_PARAMETERS=\
