@@ -26,6 +26,7 @@ Parameters:
     ConstraintDescription: Parameter cannot be empty.
   GitHubToken:
     Type: String
+    NoEcho: true
     Description: Token to authorize GitHub requests
     AllowedPattern: ".+"
     ConstraintDescription: Parameter cannot be empty.
