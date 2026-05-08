@@ -45,6 +45,7 @@ Parameters:
   GitHubToken:
     Type: String
     Description: Token to authorize GitHub requests
+    NoEcho: true
     AllowedPattern: ".+"
     ConstraintDescription: Parameter cannot be empty.
   BuildImage:
