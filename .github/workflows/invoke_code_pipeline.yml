@@ -32,7 +32,7 @@ env:
    # Note synapse-ops-core is both the repository for the code-pipeline CloudFormation definition
    # and also the repository for the various 'ops' scripts.  So we define the following once and
    # use them both for setting up the pipeline and for running the scripts.
-   REPOSITORY_OWNER: brucehoff
+   REPOSITORY_OWNER: Sage-Bionetworks
    REPOSITORY_NAME: synapse-ops-core
    REPOSITORY_BRANCH: main
 jobs:
