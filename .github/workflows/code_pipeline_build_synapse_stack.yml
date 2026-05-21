@@ -61,6 +61,7 @@ jobs:
       PIPELINE_PARAMETERS: ${{ needs.set-up.outputs.PIPELINE_PARAMETERS }}
       SECOND_REPO_NAME: Synapse-Stack-Builder
       SECOND_REPO_BRANCH: release-${{ inputs.INSTANCE }}
+      BUILD_IMAGE: aws/codebuild/amazonlinux-aarch64-standard:3.0
     secrets: inherit
     permissions:
       id-token: write
