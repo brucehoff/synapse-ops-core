@@ -24,4 +24,3 @@ export CDK_DEFAULT_ACCOUNT=$(aws sts get-caller-identity --query Account --outpu
 export CDK_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
 
 cdk deploy --context stack=$STACK --context stack_versions=$INSTANCES --context beanstalk_mode=False
-
