@@ -40,7 +40,8 @@ env:
 #   REPOSITORY_OWNER: Sage-Bionetworks
    REPOSITORY_OWNER: brucehoff
    REPOSITORY_NAME: synapse-ops-core
-   REPOSITORY_BRANCH: main
+#   REPOSITORY_BRANCH: main
+   REPOSITORY_BRANCH: PLFM-9599
 jobs:
   set-up:
     runs-on: ubuntu-latest
