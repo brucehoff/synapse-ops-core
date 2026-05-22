@@ -60,9 +60,7 @@ jobs:
     with:
       PIPELINE_PARAMETERS: ${{ needs.set-up.outputs.PIPELINE_PARAMETERS }}
       SECOND_REPO_NAME: Synapse-Stack-Builder
-      SECOND_REPO_OWNER: brucehoff
-      SECOND_REPO_BRANCH: PLFM-9599
-#      SECOND_REPO_BRANCH: release-${{ inputs.INSTANCE }}
+      SECOND_REPO_BRANCH: release-${{ inputs.INSTANCE }}
       BUILD_IMAGE: aws/codebuild/amazonlinux-aarch64-standard:3.0
       BUILD_ENVIRONMENT_TYPE: ARM_CONTAINER
     secrets: inherit
