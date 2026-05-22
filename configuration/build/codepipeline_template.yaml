@@ -42,6 +42,12 @@ Parameters:
     Default: BUILD_GENERAL1_MEDIUM
     AllowedPattern: ".+"
     ConstraintDescription: Parameter cannot be empty.
+  BuildEnvironmentType:
+    Type: String
+    Description: CodeBuild environment type (e.g., LINUX_CONTAINER or ARM_CONTAINER)
+    Default: LINUX_CONTAINER
+    AllowedPattern: ".+"
+    ConstraintDescription: Parameter cannot be empty.
   VpcId:
     Type: String
     Description: VPC ID for CodeBuild to use. Default is the VPC for synapse-dev
@@ -183,7 +189,7 @@ Resources:
       Cache:
         Type: NO_CACHE
       Environment:
-        Type: LINUX_CONTAINER
+        Type: !Ref BuildEnvironmentType
         Image: !Ref BuildImage
         ComputeType: !Ref BuildComputeType
         PrivilegedMode: true
