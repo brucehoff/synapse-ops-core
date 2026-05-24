@@ -27,6 +27,11 @@ on:
         type: string
         default: aws/codebuild/amazonlinux-x86_64-standard:5.0
         description: The CodeBuild image to use when executing the pipeline
+      BUILD_ENVIRONMENT_TYPE:
+        required: false
+        type: string
+        default: LINUX_CONTAINER
+        description: CodeBuild environment type (e.g., LINUX_CONTAINER or ARM_CONTAINER)
 
 env:
    # Note synapse-ops-core is both the repository for the code-pipeline CloudFormation definition
@@ -35,6 +40,7 @@ env:
    REPOSITORY_OWNER: Sage-Bionetworks
    REPOSITORY_NAME: synapse-ops-core
    REPOSITORY_BRANCH: main
+
 jobs:
   set-up:
     runs-on: ubuntu-latest
@@ -50,7 +56,8 @@ jobs:
           VpcId=${{ vars.VPC_ID }},\
           Subnets=${{ vars.SUBNETS }},\
           SecurityGroupIds=${{ vars.SECURITY_GROUP_IDS }},\
-          BuildImage=${{ inputs.BUILD_IMAGE }}
+          BuildImage=${{ inputs.BUILD_IMAGE }},\
+          BuildEnvironmentType=${{ inputs.BUILD_ENVIRONMENT_TYPE }}
 
           # There will be one pipeline for running jobs based on the Stack Builder
           # and one pipeline for running short lived commands.
