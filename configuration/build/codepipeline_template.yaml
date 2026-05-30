@@ -6,28 +6,14 @@ Parameters:
     Description: Script execution command
     AllowedPattern: ".+"
     ConstraintDescription: Parameter cannot be empty.
-  Repository:
+  SourceBucket:
     Type: String
-    Default: synapse-ops-core
-    Description: Repository name
+    Description: S3 bucket containing source archives uploaded by GitHub Actions
     AllowedPattern: ".+"
     ConstraintDescription: Parameter cannot be empty.
-  Branch:
+  OpsSourceKey:
     Type: String
-    Description: Branch of the repository to use
-    Default: main
-    AllowedPattern: ".+"
-    ConstraintDescription: Parameter cannot be empty.
-  RepoOwner:
-    Type: String
-    Description: Owner of the Synapse Repo to build
-    Default: Sage-Bionetworks
-    AllowedPattern: ".+"
-    ConstraintDescription: Parameter cannot be empty.
-  GitHubToken:
-    Type: String
-    NoEcho: true
-    Description: Token to authorize GitHub requests
+    Description: S3 key of the ops repo source archive
     AllowedPattern: ".+"
     ConstraintDescription: Parameter cannot be empty.
   BuildImage:
@@ -98,6 +84,15 @@ Resources:
                 Resource:
                   - !Sub "${PipelineOutputBucket.Arn}/*"
                   - !GetAtt PipelineOutputBucket.Arn
+              # Permission to read from the source upload bucket
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:GetBucketVersioning
+                Resource:
+                  - !Sub "arn:aws:s3:::${SourceBucket}/*"
+                  - !Sub "arn:aws:s3:::${SourceBucket}"
               # Permission to invoke CodeBuild
               - Effect: Allow
                 Action:
@@ -146,17 +141,15 @@ Resources:
               Namespace: CheckoutOpsRepo
               ActionTypeId:
                 Category: Source
-                Owner: ThirdParty
-                Provider: GitHub
+                Owner: AWS
+                Provider: S3
                 Version: 1
               OutputArtifacts:
                 - Name: OpsRepoSource
               Configuration:
-                Owner: !Ref RepoOwner
-                Repo: !Ref Repository
-                Branch: !Ref Branch
-                OAuthToken: !Ref GitHubToken
-                PollForSourceChanges: false # instead we will trigger from GitHub workflow
+                S3Bucket: !Ref SourceBucket
+                S3ObjectKey: !Ref OpsSourceKey
+                PollForSourceChanges: false
         - Name: RunScript
           Actions:
             - Name: RunScript

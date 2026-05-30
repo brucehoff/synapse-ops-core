@@ -42,7 +42,78 @@ env:
    REPOSITORY_BRANCH: main
 
 jobs:
+  upload_source:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout Ops Repo
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ env.REPOSITORY_OWNER }}/${{ env.REPOSITORY_NAME }}
+          ref: ${{ env.REPOSITORY_BRANCH }}
+
+      - name: Checkout Second Repo
+        if: ${{ inputs.SECOND_REPO_NAME != '' }}
+        uses: actions/checkout@v5
+        with:
+          repository: ${{ inputs.SECOND_REPO_OWNER }}/${{ inputs.SECOND_REPO_NAME }}
+          ref: ${{ inputs.SECOND_REPO_BRANCH }}
+          path: second-repo
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ vars.ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+
+      - name: Upload Sources to S3
+        id: upload
+        run: |
+          BUCKET="synapse-ops-build-source"
+
+          # Ensure bucket exists with versioning and lifecycle policy
+          if ! aws s3api head-bucket --bucket "$BUCKET" 2>/dev/null; then
+            aws s3api create-bucket --bucket "$BUCKET" --region us-east-1
+            aws s3api put-public-access-block --bucket "$BUCKET" \
+              --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
+            aws s3api put-bucket-versioning --bucket "$BUCKET" \
+              --versioning-configuration Status=Enabled
+            aws s3api put-bucket-lifecycle-configuration --bucket "$BUCKET" \
+              --lifecycle-configuration '{"Rules":[{"ID":"PurgeOldUploads","Status":"Enabled","Expiration":{"Days":7},"Filter":{"Prefix":""}}]}'
+          fi
+
+          # Resolve ops repo commit SHA
+          OPS_SHA=$(git rev-parse HEAD)
+
+          OPS_KEY="${{ env.REPOSITORY_OWNER }}/${{ env.REPOSITORY_NAME }}/${OPS_SHA}/${{ env.REPOSITORY_NAME }}.zip"
+
+          # Zip and upload ops repo
+          zip -qr /tmp/ops.zip . -x '.git/*' 'second-repo/*'
+          aws s3 cp /tmp/ops.zip "s3://${BUCKET}/${OPS_KEY}"
+
+          echo "SOURCE_BUCKET=$BUCKET" >> $GITHUB_OUTPUT
+          echo "OPS_SOURCE_KEY=$OPS_KEY" >> $GITHUB_OUTPUT
+
+          # Upload second repo if present
+          if [[ "${{ inputs.SECOND_REPO_NAME }}" ]]; then
+            SECOND_REPO_SHA=$(git -C second-repo rev-parse HEAD)
+            SECOND_REPO_KEY="${{ inputs.SECOND_REPO_OWNER }}/${{ inputs.SECOND_REPO_NAME }}/${SECOND_REPO_SHA}/${{ inputs.SECOND_REPO_NAME }}.zip"
+            cd second-repo
+            zip -qr /tmp/second-repo.zip . -x '.git/*'
+            aws s3 cp /tmp/second-repo.zip "s3://${BUCKET}/${SECOND_REPO_KEY}"
+            echo "SECOND_REPO_SOURCE_KEY=$SECOND_REPO_KEY" >> $GITHUB_OUTPUT
+          fi
+
+    outputs:
+      SOURCE_BUCKET: ${{ steps.upload.outputs.SOURCE_BUCKET }}
+      OPS_SOURCE_KEY: ${{ steps.upload.outputs.OPS_SOURCE_KEY }}
+      SECOND_REPO_SOURCE_KEY: ${{ steps.upload.outputs.SECOND_REPO_SOURCE_KEY }}
+
   set-up:
+    needs: upload_source
     runs-on: ubuntu-latest
     steps:
       - name: Determine Pipeline Parameters
@@ -50,9 +121,8 @@ jobs:
         run: |
           PIPELINE_PARAMETERS=\
           ${{ inputs.PIPELINE_PARAMETERS }},\
-          Branch=${{ env.REPOSITORY_BRANCH }},\
-          RepoOwner=${{ env.REPOSITORY_OWNER }},\
-          Repository=${{ env.REPOSITORY_NAME }},\
+          SourceBucket=${{ needs.upload_source.outputs.SOURCE_BUCKET }},\
+          OpsSourceKey=${{ needs.upload_source.outputs.OPS_SOURCE_KEY }},\
           VpcId=${{ vars.VPC_ID }},\
           Subnets=${{ vars.SUBNETS }},\
           SecurityGroupIds=${{ vars.SECURITY_GROUP_IDS }},\
@@ -64,7 +134,7 @@ jobs:
           if [[ "${{ inputs.SECOND_REPO_NAME }}" ]]; then
             echo "CODE_PIPELINE_NAME=Deployment-Pipeline" >> $GITHUB_OUTPUT
             echo "PATH_TO_PIPELINE=configuration/build/codepipeline_with_second_repo_template.yaml" >> $GITHUB_OUTPUT
-            PIPELINE_PARAMETERS=${PIPELINE_PARAMETERS},SecondRepoOwner=${{ inputs.SECOND_REPO_OWNER }},SecondRepoName=${{ inputs.SECOND_REPO_NAME }},SecondRepoBranch=${{ inputs.SECOND_REPO_BRANCH }}
+            PIPELINE_PARAMETERS=${PIPELINE_PARAMETERS},SecondRepoSourceKey=${{ needs.upload_source.outputs.SECOND_REPO_SOURCE_KEY }}
           else
             echo "CODE_PIPELINE_NAME=Shared-Pipeline" >> $GITHUB_OUTPUT
             echo "PATH_TO_PIPELINE=configuration/build/codepipeline_template.yaml" >> $GITHUB_OUTPUT
@@ -81,7 +151,7 @@ jobs:
 
   invoke_workflow:
     needs: set-up
-    uses: Sage-Bionetworks/Synapse-Code-Pipeline/.github/workflows/execute_code_pipeline.yml@main
+    uses: Sage-Bionetworks/Synapse-Code-Pipeline/.github/workflows/execute_code_pipeline_v2.yml@main
     with:
       # Note the following specifies the repo' that contains the code pipeline definition
       REPOSITORY_NAME: ${{ needs.set-up.outputs.REPO_OWNER_AND_NAME }}
