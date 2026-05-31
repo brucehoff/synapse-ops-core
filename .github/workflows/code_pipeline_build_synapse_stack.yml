@@ -58,6 +58,7 @@ jobs:
     needs: set-up
     uses: "./.github/workflows/invoke_code_pipeline.yml"
     with:
+      STACK: ${{ inputs.STACK }}
       PIPELINE_PARAMETERS: ${{ needs.set-up.outputs.PIPELINE_PARAMETERS }}
       SECOND_REPO_NAME: Synapse-Stack-Builder
       SECOND_REPO_BRANCH: release-${{ inputs.INSTANCE }}
