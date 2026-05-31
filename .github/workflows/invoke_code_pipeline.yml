@@ -32,10 +32,6 @@ on:
         type: string
         default: LINUX_CONTAINER
         description: CodeBuild environment type (e.g., LINUX_CONTAINER or ARM_CONTAINER)
-      STACK:
-        required: true
-        type: string
-        description: The stack for which to invoke the pipeline (e.g., prod, staging,
 
 env:
    # Note synapse-ops-core is both the repository for the code-pipeline CloudFormation definition
@@ -76,7 +72,7 @@ jobs:
       - name: Upload Sources to S3
         id: upload
         run: |
-          STACK="${{ inputs.STACK }}"
+          STACK="${{ vars.CONTEXT }}"
           BUCKET="${STACK}-synapse-ops-build-source"
 
           # Ensure bucket exists with versioning and lifecycle policy
