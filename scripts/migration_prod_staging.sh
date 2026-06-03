@@ -16,8 +16,10 @@ REMAIN_READ_ONLY_MODE=${2}
 
 SERVICE_KEY=${3}
 
+DESTINATION_STACK=${4}
+
 # Folder containing source code
-SRC_PATH=${4}
+SRC_PATH=${5}
 
 cd $SRC_PATH
 
@@ -35,6 +37,7 @@ export CMD_PROPS=\
 " -Dorg.sagebionetworks.delay.before.start.ms=30000"\
 " -Dorg.sagebionetworks.include.full.table.checksum=false"\
 " -Dorg.sagebionetworks.service.key=${SERVICE_KEY}"\
-" -Dorg.sagebionetworks.remain.read.only.mode=${REMAIN_READ_ONLY_MODE}"
+" -Dorg.sagebionetworks.remain.read.only.mode=${REMAIN_READ_ONLY_MODE}"\
+" -Dorg.sagebionetworks.destination.stack.type=${DESTINATION_STACK}"
 
 java -Xms256m -Xmx4g -cp ./target/migration-utility-1.3-419-jar-with-dependencies.jar $CMD_PROPS org.sagebionetworks.migration.MigrationClientMain
